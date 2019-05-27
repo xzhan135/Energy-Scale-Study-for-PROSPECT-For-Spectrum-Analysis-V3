@@ -1,0 +1,34 @@
+\subsection{Antineutrino Detector Data}
+
+Raw data are stored using LLNL's HPSS service.
+Within about an hour of data being taken, a copy is made on the HPSS and from that point on serves as the archival copy.
+The original copy of the raw data is removed as needed to reclaim storage space on the DAQ computers.
+This removal is done with a custom software tool that checks that the HPSS copy exists and has an identical checksum to the original copy,
+	and only deletes the original if the HPSS copy is confirmed to be identical.
+Once that occurs, the HPSS copy is the only copy of the raw data.
+\rvnote{Are the Unpacked files stored on the LLNL HPSS tapes?}
+
+A secondary archive exists at Yale.
+Instead of archiving the raw data, the Yale archive contains the Unpacked data.
+Unpacked data losslessly contains all the information of the raw data, only differing in storage format.
+As a result, the Yale archive can be used to recover the original raw data if needed in the event of a data loss at the LLNL HPSS archive.
+\rvnote{How do the Unpacked files make their way to Yale?}
+
+Processed data is kept on spinning disks at LLNL.
+These disks are non-permanent storage subject to a deletion policy, reflecting our policy that processed data is not intended to be permanently preserved in all cases.
+Instead, the record of the data processing allows processed data to be regenerated at any time using identical settings (including software version) as the original.
+
+\rvnote{Does the data management plan require making any of the processed data available after a publication?  Will a copy of the processed data be tagged and saved when major publications are submitted?  How does the data storage interact with the blinding scheme?}
+
+
+\subsection{Databases}
+
+Run and calibration databases are stored as sqlite3 files.
+The run database is periodically copied from the DAQ coordinator node to Yale, along with updated files.
+The calibration database is generated fresh as part of the analysis process for each ``data release'' calibration pass,
+	and kept with the associated calibrated data files.
+\textbf{how are DB tables stored, backup, distributed, etc?}
+
+\subsection{Code Repositories}
+
+\textbf{TL to write a paragraph about the git repo?}

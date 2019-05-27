@@ -1,0 +1,12 @@
+\rvnote{Is there a mechanism for data redistribution to the collaboration?  Will Unpacked files be available from just Yale, or LLNL and Yale?}
+
+\nbnote{TL - what are plans for Yale storage - raw? or unpacked?}
+
+Raw data is transferred from the DAQ hardware at HFIR to LLNL for archival storage.
+A custom software application schedules transfers and supervises each data file's transfer to ensure transfers complete successfully and without data corruption.
+Files are first transferred from the PROSPECT gateway computer at HFIR to LLNL's scratch storage, and from there moved to LLNL's HPSS.
+The file is checked at each step to ensure errorless transfer, and transfers are logged in a database.
+
+We achieve a transfer speed of approximately 60 MB/s, which significantly outpaces the speed of data taking even in reactor-on conditions.
+As a result, in the event of a temporary network outage (one of which has occurred) the data transfer can catch up quickly to the latest data.
+This data transfer can be monitored from an internal website, so any collaborator can easily identify if the transfer process is failing.

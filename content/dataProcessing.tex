@@ -1,0 +1,71 @@
+
+\begin{table*}[tbp]
+  \begin{centering}
+  \begin{tabular}{l|lll}
+  Processing Step/Run Condition& Reactor On & Reactor Off & Calibration \\ \hline
+  Raw File Size (MB/run) & XX & XX &  XX \\
+  Unpacked File Size (MB/run) & XX & XX &  XX \\
+  Raw $\rightarrow$ Unpack processing time (CPU/hour/file)& XX & XX &  XX \\
+  DetPulse File Size (MB/run) & XX & XX &  XX \\
+  Unpack $\rightarrow$ DetPulse processing time (CPU/hour/file)& XX & XX &  XX \\
+  PhysPulse File Size (MB/run) & XX & XX &  XX \\
+  DetPulse $\rightarrow$ PhysPulse processing time (CPU/hour/file)& XX & XX &  XX \\
+  \end{tabular}
+  \caption[dataRates]
+  {Data file sizes and processing time for three typical operating conditions. Sizes given are for a typical run length of XX min. Give time to process one reactor cycle and one year of data (for 7 HFIR cycles)}
+  \label{tab:dataSize}
+  \end{centering}
+\end{table*}
+
+Data is processed through the following steps in sequence:
+
+\subsection{Raw data}
+
+Raw data is output directly by the DAQ in a compressed binary format. One file exists for each digitizer board per run duration, which is typically ten minutes.
+
+\subsection{Unpacked data}
+
+The Unpacking step combines the raw data files from the multiple digitizer boards into a single file and converts from the compressed binary format of the raw data into a ROOT TTree.
+The fundamental information, i.e. the digitizer waveforms, remains the same.
+Thus, this step does not involve any physical or data analysis processing and only is a different format of the original data.
+A channel map between the physical hardware channels and their ``logical'' functions ({e.g.} PMT positions in the detector) is included in the unpacked ROOT file.
+
+\subsection{DetPulse data}
+Unpacked data is processed through a custom software utility called PulseCruncher.
+PulseCruncher reads each digitized waveform and identifies signal pulses there.
+The output of the PulseCruncher is a file containing DetPulses, each of which has the following attributes:
+\begin{itemize}
+\item Event number (from the WFD board trigger counter)
+\item PMT that detected this pulse
+\item Pulse area (in uncalibrated digitizer units)
+\item Pulse arrival time at PMT (in ns from the run start)
+\item Pulse height (in uncalibrated digitizer units)
+\item The waveform baseline that was subtracted from the raw data to measure the pulse height/area
+\item Risetime of the pulse
+\item Pulse-shape discrimination (PSD) parameter
+\end{itemize}
+
+In other words, this stage of processing converts digitized waveforms into a summary of the signal pulses in those waveforms, without applying any calibration.
+
+\subsection{PhysPulse data}
+A calibration is applied in this step, converting uncalibrated DetPulses to calibrated PhysPulses.
+The calibration is applied using a database storing the interpreted calibration results extracted from earlier data.
+Applying the calibration combines information from both PMTs in a pulse's segment,
+	and so each PhysPulse is typically the combination of two DetPulses,
+    	including information about the segment as a whole as well as the signal in each of the two PMTs.
+Each PhysPulse contains the following information:
+\begin{itemize}
+\item Event number
+\item Segment number
+\item Pulse energy (in calibrated MeV\textsubscript{ee})
+\item Pulse time (in ns from run start)
+\item $\Delta t$, time difference between detection of this pulse in the two PMTs in this segment
+\item Estimated number of photoelectrons detected each each PMT
+\item Reconstructed position of the pulse along the segment axis
+\item Pulse-shape discrimination parameter
+\item The identified particle for this pulse.
+	This indicates either a gamma/beta/muon or a neutron recoil, and separately whether the signal falls into the neutron-capture-on-\textsuperscript{6}Li region in PSD and energy. 
+\end{itemize}
+
+
+
